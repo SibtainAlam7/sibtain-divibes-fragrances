@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Eye, Heart } from 'lucide-react';
 import { formatPKR } from '../data/products';
 import { useStore } from '../context/StoreContext';
@@ -11,15 +10,7 @@ export default function ProductCard({ product, index = 0, variant = 'light' }) {
   const isDark = variant === 'dark';
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.05 }}
-      transition={{
-        duration: 0.55,
-        delay: Math.min(index * 0.05, 0.25),
-        ease: [0.22, 1, 0.36, 1],
-      }}
+    <article
       className={`group relative flex flex-col transition-all duration-500 ${
         isDark
           ? 'rounded-2xl bg-[#F5F1EA]/[0.06] border border-[#B89A72]/30 hover:border-[#B89A72] p-3.5 hover:-translate-y-1 shadow-sm'
@@ -36,7 +27,7 @@ export default function ProductCard({ product, index = 0, variant = 'light' }) {
           <img
             src={product.images[0]}
             alt={product.fullTitle}
-            loading="lazy"
+            loading={index < 6 ? 'eager' : 'lazy'}
             decoding="async"
             className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
           />
@@ -164,6 +155,6 @@ export default function ProductCard({ product, index = 0, variant = 'light' }) {
           Add To Cart
         </button>
       </div>
-    </motion.article>
+    </article>
   );
 }
