@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -49,6 +49,54 @@ export default function DrawersAndModals() {
   const [qvSlot3Available, setQvSlot3Available] = useState(true);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Mobile Back-Button (Android) & Swipe-Back (iOS) Support for All Overlays
+  const anyOverlayOpen =
+    isCartOpen || isWishlistOpen || isSearchOpen || Boolean(quickViewProduct);
+  const overlayHistoryPushedRef = useRef(false);
+  const closingViaBackRef = useRef(false);
+  const overlayOpenPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (anyOverlayOpen && !overlayHistoryPushedRef.current) {
+      overlayOpenPathRef.current = location.pathname;
+      window.history.pushState(
+        { ...(window.history.state || {}), divibesOverlay: true },
+        ''
+      );
+      overlayHistoryPushedRef.current = true;
+    } else if (!anyOverlayOpen && overlayHistoryPushedRef.current) {
+      overlayHistoryPushedRef.current = false;
+      if (closingViaBackRef.current) {
+        closingViaBackRef.current = false;
+      } else if (location.pathname === overlayOpenPathRef.current) {
+        window.history.back();
+      }
+    }
+  }, [anyOverlayOpen, location.pathname]);
+
+  useEffect(() => {
+    if (!anyOverlayOpen) return undefined;
+    const handlePopState = () => {
+      if (overlayHistoryPushedRef.current) {
+        closingViaBackRef.current = true;
+        overlayHistoryPushedRef.current = false;
+        setIsCartOpen(false);
+        setIsWishlistOpen(false);
+        setIsSearchOpen(false);
+        setQuickViewProduct(null);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [
+    anyOverlayOpen,
+    setIsCartOpen,
+    setIsWishlistOpen,
+    setIsSearchOpen,
+    setQuickViewProduct,
+  ]);
 
   // Close search overlay on Escape key
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Menu, Search, ShoppingBag, X } from 'lucide-react';
@@ -24,10 +24,44 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const menuHistoryPushedRef = useRef(false);
+  const menuClosingByBackRef = useRef(false);
+  const menuOpenPathRef = useRef(location.pathname);
 
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (mobileMenuOpen && !menuHistoryPushedRef.current) {
+      menuOpenPathRef.current = location.pathname;
+      window.history.pushState(
+        { ...(window.history.state || {}), divibesMobileMenu: true },
+        ''
+      );
+      menuHistoryPushedRef.current = true;
+    } else if (!mobileMenuOpen && menuHistoryPushedRef.current) {
+      menuHistoryPushedRef.current = false;
+      if (menuClosingByBackRef.current) {
+        menuClosingByBackRef.current = false;
+      } else if (location.pathname === menuOpenPathRef.current) {
+        window.history.back();
+      }
+    }
+  }, [mobileMenuOpen, location.pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return undefined;
+    const handlePopState = () => {
+      if (menuHistoryPushedRef.current) {
+        menuClosingByBackRef.current = true;
+        menuHistoryPushedRef.current = false;
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
