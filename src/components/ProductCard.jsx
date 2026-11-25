@@ -12,9 +12,9 @@ export default function ProductCard({ product, index = 0, variant = 'light' }) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{
         duration: 0.55,
         delay: Math.min(index * 0.05, 0.25),

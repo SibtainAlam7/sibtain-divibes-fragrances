@@ -20,7 +20,21 @@ export default function OurProductsSection() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activePage, setActivePage] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(min-width: 1024px) and (hover: hover)').matches
+      : false
+  );
   const sliderRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mq = window.matchMedia('(min-width: 1024px) and (hover: hover)');
+    const onChange = (e) => setIsDesktop(e.matches);
+    setIsDesktop(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   const filteredProducts = useMemo(() => {
     if (activeFilter === 'all') return PRODUCTS;
@@ -42,8 +56,9 @@ export default function OurProductsSection() {
     setActivePage(clamped);
   };
 
+  // Auto-advance ONLY on desktop with hover capability — never hijack mobile/tablet touch scrolling
   useEffect(() => {
-    if (isPaused || totalDots <= 1) return undefined;
+    if (!isDesktop || isPaused || totalDots <= 1) return undefined;
     const timer = setInterval(() => {
       setActivePage((prev) => {
         const next = (prev + 1) % totalDots;
@@ -57,7 +72,7 @@ export default function OurProductsSection() {
       });
     }, 5200);
     return () => clearInterval(timer);
-  }, [isPaused, totalDots]);
+  }, [isDesktop, isPaused, totalDots]);
 
   const handleScroll = () => {
     const el = sliderRef.current;
@@ -165,11 +180,12 @@ export default function OurProductsSection() {
             </>
           )}
 
-          {/* Horizontal Smooth Track */}
+          {/* Horizontal Smooth Track — Native iOS/Android Momentum Swipe without CSS scroll-smooth conflict */}
           <div
             ref={sliderRef}
             onScroll={handleScroll}
-            className="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2 scroll-smooth"
+            onTouchStart={() => setIsPaused(true)}
+            className="flex gap-5 sm:gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2"
           >
             {filteredProducts.map((product, index) => (
               <div
