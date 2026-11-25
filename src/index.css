@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #F5F1EA;      /* Main page background */
+    --color-stone: #E8E0D5;      /* Product image background */
+    --color-espresso: #292522;   /* Typography & buttons */
+    --color-champagne: #B89A72;  /* Accents */
+    --color-sand: #D8CEC1;       /* Secondary sections */
+    --color-pure: #FFFFFF;       /* Cards / whitespace */
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #F5F1EA;
+    color: #292522;
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+  }
+
+  body {
+    background-color: #F5F1EA;
+    color: #292522;
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #292522;
+  }
+
+  /* Custom Soft Champagne / Sand Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F5F1EA;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D8CEC1;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B89A72;
+  }
+}
+
+/* ============================================================================
+   FINAL DIVIBES FRAGRANCES DESIGN SYSTEM — EXACT TYPOGRAPHY MAPPING
+   - Hero heading:     Cormorant Garamond
+   - Section headings: Cormorant Garamond
+   - Product names:    Cormorant Garamond Medium (500)
+   - Navbar:           Manrope Medium (500)
+   - Buttons:          Manrope SemiBold (600)
+   - Prices:           Manrope Medium (500)
+   - Description:      Manrope Regular (400)
+   ============================================================================ */
+
+.heading-hero {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.06 !important;
+  color: #292522;
+}
+
+.heading-section {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  line-height: 1.12 !important;
+  color: #292522;
+}
+
+.product-title {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  color: #292522;
+}
+
+.nav-text {
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+.btn-text {
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.price-text {
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 500 !important;
+  color: #292522;
+}
+
+.body-copy {
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.luxury-eyebrow {
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B89A72;
+}
+
+.btn-espresso {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  background-color: #292522;
+  color: #F5F1EA;
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 1rem 1.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-espresso:hover {
+  background-color: #B89A72;
+  color: #292522;
+}
+
+.btn-outline-luxury {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border: 1px solid #B89A72;
+  background-color: #FFFFFF;
+  color: #292522;
+  font-family: 'Manrope', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 1rem 1.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-luxury:hover {
+  background-color: #292522;
+  border-color: #292522;
+  color: #F5F1EA;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes marqueeSlow {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marqueeSlow 36s linear infinite;
+}
+
+.animate-marquee-slow:hover {
+  animation-play-state: paused;
+}
